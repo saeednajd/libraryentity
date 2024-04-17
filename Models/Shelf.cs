@@ -7,9 +7,9 @@ namespace mvc.Models
 {
     public class Shelf
     {
-        public int Identifier { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-
+        public List<BookShelfAndShelves> BookShelfAndShelves {get;set;}
         public Shelf(String name){
             Name = name;
         }

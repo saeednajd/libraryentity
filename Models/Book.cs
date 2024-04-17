@@ -11,6 +11,7 @@ namespace mvc.Models
         public string  Title { get; set; }
         public int Pages { get; set; }
 
+        public List<BookShelfAndBook> BookShelfAndBooks{get ; set ;}
         public Book(string title,int pages){
             Title = title;
             Pages = pages;

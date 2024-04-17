@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,7 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<Mycontext>
+builder.Services.AddDbContext<Mycontext>(x =>x.UseSqlServer(@"Server=DESKTOP-O6QC243;Database=Efcore;Trusted_Connection=True;TrustServerCertificate=True
+"));
 var app = builder.Build();
 
 

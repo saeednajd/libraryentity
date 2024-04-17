@@ -6,15 +6,19 @@ namespace mvc.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    private readonly Mycontext _context;
+    public HomeController(Mycontext context)
     {
-        _logger = logger;
+       _context = context;
     }
 
     public IActionResult Index()
     {
+        var x = new User("saed","111");
+        _context.Users.Add(x);
+
+        _context.SaveChanges();
         return View();
     }
 
