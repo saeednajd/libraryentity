@@ -1,4 +1,4 @@
-﻿@model List<User>
+﻿@model List<BookShelfAndUser>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -22,9 +22,8 @@
     @foreach(var user in Model){
     <tr>
       <th>@user.Id</th>
-      <td>@user.Username</td>
-      <td>@user.Password</td>
-      <td>@user.Joindate</td>
+      <td>@user.</td>
+      
     </tr>
     }
   </tbody>
