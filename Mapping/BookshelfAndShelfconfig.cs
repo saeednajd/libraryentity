@@ -13,8 +13,8 @@ namespace mvc.Mapping
     {
         public void Configure(EntityTypeBuilder<BookShelfAndShelves> builder)
         {
+            builder.HasKey(x => x.Id);
             builder.ToTable("BookShelfAndShelves");
-            builder.HasKey(x => new { x.BookshelfId, x.ShelfId });
 
             builder.HasOne(x => x.BookShelf).WithMany(x => x.BookShelfAndShelves).HasForeignKey(x => x.BookshelfId);
             builder.HasOne(x => x.Shelf).WithMany(x => x.BookShelfAndShelves).HasForeignKey(x=>x.ShelfId);

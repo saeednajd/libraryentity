@@ -1,6 +1,7 @@
-﻿@model List<BookShelfAndUser>
+﻿@using mvc.Controllers
+@model List<OneUserBooksView>
 @{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
 }
 
 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AllBooks">All Books</a>
@@ -14,18 +15,20 @@
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Username</th>
-      <th scope="col">Password</th>
-      <th scope="col">JoinDate</th>
+      <th scope="col">Title</th>
     </tr>
   </thead>
-  <tbody>
-    @foreach(var user in Model){
-    <tr>
-      <th>@user.Id</th>
-      <td>@user.</td>
-      
-    </tr>
-    }
-  </tbody>
-</table>
+  <tr>
+    @foreach (var x in Model)
+    {
+      <td>@x.Id</td>
+      <td>@x.UserName</td>
+      <td>@string.Join(", ",x.Title)</td>
 
+
+    }
+
+  </tr>
+
+
+</table>

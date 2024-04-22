@@ -1,12 +1,14 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using mvc.Models;
 
 namespace mvc.Controllers;
 
 public class HomeController : Controller
 {
+
 
     private readonly Mycontext _context;
     public HomeController(Mycontext context)
@@ -30,20 +32,24 @@ public class HomeController : Controller
     public IActionResult OneUserBooks()
     {
 
+        List<OneUserBooksView> users = [.. _context.Users
+        .Include(x=>x.bookShelfAndUsers)
+        .ThenInclude(x=>x.BookShelf)
+        .ThenInclude(x=>x.BookShelfAndBooks)
+        .ThenInclude(x=>x.Books)
+        .Where(x=>x.Id==1)
+        .Select(x => new OneUserBooksView{
+            Id = x.Id,
+            UserName = x.Username,
+            Title = x.bookShelfAndUsers.SelectMany(x => x.BookShelf.BookShelfAndBooks).Select(x => x.Books.Title).ToArray()
+        })];
+
+    
+        
 
 
 
-        /////////var userId = "your_user_id"; // شناسه کاربر مورد نظر را اینجا قرار دهید
-
-        var OneUserBooks = _context.BookShelfAndUsers
-            .Where(x => x.UserId == 1) // فیلتر کردن بر اساس شناسه کاربر
-            .Include(x => x.BookShelf) // اضافه کردن اطلاعات قفسه
-                .ThenInclude(x => x.BookShelfAndBooks) // اضافه کردن اطلاعات کتاب‌های موجود در قفسه
-                    .ThenInclude(x => x.Books) // اضافه کردن اطلاعات کتاب
-            .ToList();
-
-
-        return View(OneUserBooks);
+        return View(users);
     }
 
     public IActionResult Privacy()

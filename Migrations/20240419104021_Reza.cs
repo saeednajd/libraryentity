@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace mvc.Migrations
 {
     /// <inheritdoc />
-    public partial class mappingfinal6 : Migration
+    public partial class Reza : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,13 +71,14 @@ namespace mvc.Migrations
                 name: "BookShelfAndBooks",
                 columns: table => new
                 {
-                    BookShelfId = table.Column<int>(type: "int", nullable: false),
-                    BookID = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookShelfId = table.Column<int>(type: "int", nullable: false),
+                    BookID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookShelfAndBooks", x => new { x.BookID, x.BookShelfId });
+                    table.PrimaryKey("PK_BookShelfAndBooks", x => x.Id);
                     table.ForeignKey(
                         name: "FK_BookShelfAndBooks_Books_BookID",
                         column: x => x.BookID,
@@ -87,6 +88,32 @@ namespace mvc.Migrations
                     table.ForeignKey(
                         name: "FK_BookShelfAndBooks_bookShelves_BookShelfId",
                         column: x => x.BookShelfId,
+                        principalTable: "bookShelves",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookShelfAndShelves",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookshelfId = table.Column<int>(type: "int", nullable: false),
+                    ShelfId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookShelfAndShelves", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookShelfAndShelves_Shelves_ShelfId",
+                        column: x => x.ShelfId,
+                        principalTable: "Shelves",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookShelfAndShelves_bookShelves_BookshelfId",
+                        column: x => x.BookshelfId,
                         principalTable: "bookShelves",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -119,9 +146,24 @@ namespace mvc.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookShelfAndBooks_BookID",
+                table: "BookShelfAndBooks",
+                column: "BookID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BookShelfAndBooks_BookShelfId",
                 table: "BookShelfAndBooks",
                 column: "BookShelfId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookShelfAndShelves_BookshelfId",
+                table: "BookShelfAndShelves",
+                column: "BookshelfId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookShelfAndShelves_ShelfId",
+                table: "BookShelfAndShelves",
+                column: "ShelfId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookShelfAndUsers_BookShelfId",
@@ -141,13 +183,16 @@ namespace mvc.Migrations
                 name: "BookShelfAndBooks");
 
             migrationBuilder.DropTable(
+                name: "BookShelfAndShelves");
+
+            migrationBuilder.DropTable(
                 name: "BookShelfAndUsers");
 
             migrationBuilder.DropTable(
-                name: "Shelves");
+                name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Shelves");
 
             migrationBuilder.DropTable(
                 name: "Users");

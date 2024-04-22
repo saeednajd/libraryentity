@@ -12,8 +12,8 @@ using mvc;
 namespace mvc.Migrations
 {
     [DbContext(typeof(Mycontext))]
-    [Migration("20240417131812_mappingfinal6")]
-    partial class mappingfinal6
+    [Migration("20240419104021_Reza")]
+    partial class Reza
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,20 +64,48 @@ namespace mvc.Migrations
 
             modelBuilder.Entity("mvc.Models.BookShelfAndBook", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("BookID")
                         .HasColumnType("int");
 
                     b.Property<int>("BookShelfId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.HasKey("BookID", "BookShelfId");
+                    b.HasIndex("BookID");
 
                     b.HasIndex("BookShelfId");
 
                     b.ToTable("BookShelfAndBooks", (string)null);
+                });
+
+            modelBuilder.Entity("mvc.Models.BookShelfAndShelves", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookshelfId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShelfId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookshelfId");
+
+                    b.HasIndex("ShelfId");
+
+                    b.ToTable("BookShelfAndShelves", (string)null);
                 });
 
             modelBuilder.Entity("mvc.Models.BookShelfAndUser", b =>
@@ -169,6 +197,25 @@ namespace mvc.Migrations
                     b.Navigation("Books");
                 });
 
+            modelBuilder.Entity("mvc.Models.BookShelfAndShelves", b =>
+                {
+                    b.HasOne("mvc.Models.BookShelf", "BookShelf")
+                        .WithMany("BookShelfAndShelves")
+                        .HasForeignKey("BookshelfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("mvc.Models.Shelf", "Shelf")
+                        .WithMany("BookShelfAndShelves")
+                        .HasForeignKey("ShelfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BookShelf");
+
+                    b.Navigation("Shelf");
+                });
+
             modelBuilder.Entity("mvc.Models.BookShelfAndUser", b =>
                 {
                     b.HasOne("mvc.Models.BookShelf", "BookShelf")
@@ -197,7 +244,14 @@ namespace mvc.Migrations
                 {
                     b.Navigation("BookShelfAndBooks");
 
+                    b.Navigation("BookShelfAndShelves");
+
                     b.Navigation("bookShelfAndUsers");
+                });
+
+            modelBuilder.Entity("mvc.Models.Shelf", b =>
+                {
+                    b.Navigation("BookShelfAndShelves");
                 });
 
             modelBuilder.Entity("mvc.Models.User", b =>

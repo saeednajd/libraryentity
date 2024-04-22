@@ -61,16 +61,21 @@ namespace mvc.Migrations
 
             modelBuilder.Entity("mvc.Models.BookShelfAndBook", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("BookID")
                         .HasColumnType("int");
 
                     b.Property<int>("BookShelfId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.HasKey("BookID", "BookShelfId");
+                    b.HasIndex("BookID");
 
                     b.HasIndex("BookShelfId");
 
@@ -79,16 +84,21 @@ namespace mvc.Migrations
 
             modelBuilder.Entity("mvc.Models.BookShelfAndShelves", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("BookshelfId")
                         .HasColumnType("int");
 
                     b.Property<int>("ShelfId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.HasKey("BookshelfId", "ShelfId");
+                    b.HasIndex("BookshelfId");
 
                     b.HasIndex("ShelfId");
 
