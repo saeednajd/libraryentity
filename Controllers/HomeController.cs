@@ -32,7 +32,7 @@ public class HomeController : Controller
     public IActionResult OneUserBooks()
     {
 
-        List<OneUserBooksView> users = [.. _context.Users
+        List<OneUserBooksView> users = [.._context.Users
         .Include(x=>x.bookShelfAndUsers)
         .ThenInclude(x=>x.BookShelf)
         .ThenInclude(x=>x.BookShelfAndBooks)
@@ -43,11 +43,29 @@ public class HomeController : Controller
             UserName = x.Username,
             Title = x.bookShelfAndUsers.SelectMany(x => x.BookShelf.BookShelfAndBooks).Select(x => x.Books.Title).ToArray()
         })];
+        return View(users);
+    }
+    public IActionResult Status()
+    {
+        int myuser = 1;
+    //// first method
+        var userss = _context.Books
+    .Where(book => book.BookShelfAndBooks
+        .Any(bsb => bsb.BookShelves
+            .bookShelfAndUsers
+            .Any(bs => bs.User.Id == myuser)))
+                .ToList();
 
-    
+
         
-
-
+        /// secend method
+        var users = _context.Books
+    .Include(x => x.BookShelfAndBooks)
+        .ThenInclude(x => x.BookShelves)
+            .ThenInclude(x => x.bookShelfAndUsers)
+                .ThenInclude(x => x.User)
+    .Where(x => x.BookShelfAndBooks.Any(bsb => bsb.BookShelves.bookShelfAndUsers.Any(x => x.UserId == myuser)))
+    .ToList();
 
         return View(users);
     }
