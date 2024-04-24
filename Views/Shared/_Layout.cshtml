@@ -30,8 +30,22 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
+            <style>
+.mybtn{
+    display: flex;
+    justify-content: center;
+    background-color: antiquewhite;
+}
+.mybtn:hover{
+  opacity: 0.8;
+}
+</style>
+<a class="nav-link text-dark mybtn" asp-area="" asp-controller="Home" asp-action="AllBooks">All Books</a>
+<a class="nav-link text-dark mybtn" asp-area="" asp-controller="Home" asp-action="OneUserBooks">One user Books</a>
+<a class="nav-link text-dark mybtn" asp-area="" asp-controller="Home" asp-action="Status">books by status</a>
             @RenderBody()
         </main>
     </div>

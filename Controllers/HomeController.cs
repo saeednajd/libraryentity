@@ -56,8 +56,6 @@ public class HomeController : Controller
             .Any(bs => bs.User.Id == myuser)))
                 .ToList();
 
-
-        
         /// secend method
         var users = _context.Books
     .Include(x => x.BookShelfAndBooks)
