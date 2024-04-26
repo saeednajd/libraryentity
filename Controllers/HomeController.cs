@@ -48,7 +48,7 @@ public class HomeController : Controller
     public IActionResult Status()
     {
         int myuser = 1;
-    //// first method
+        //// first method
         var userss = _context.Books
     .Where(book => book.BookShelfAndBooks
         .Any(bsb => bsb.BookShelves
@@ -69,15 +69,25 @@ public class HomeController : Controller
     }
 
 
-    public IActionResult Bestbooks(){
+    public IActionResult Bestbooks()
+    {
 
         var bsetbooks = _context.BookShelves
-        .Include(x=>x.BookShelfAndBooks)
-        .ThenInclude(x=>x.Books)
-        .Take(5)
+        .Include(x => x.BookShelfAndBooks)
+        .ThenInclude(x => x.Books)
         .ToList();
-        
-        return View();
+        var result =bsetbooks.GroupBy(x => x.BookStatus)
+            .Select(z => (
+                z.Key,
+                z.Count()
+                )).ToList();
+        ////
+        // var x =  _context.BookShelves
+        // .Include(x=>x.BookShelfAndBooks)
+        // .ThenInclude(x=>x.Books)
+
+        // .SelectMany(x=>x.BookShelfAndBooks.Select(x=>x.BookID))
+        return View(result);
     }
     public IActionResult Privacy()
     {
