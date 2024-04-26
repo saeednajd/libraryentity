@@ -68,6 +68,17 @@ public class HomeController : Controller
         return View(users);
     }
 
+
+    public IActionResult Bestbooks(){
+
+        var bsetbooks = _context.BookShelves
+        .Include(x=>x.BookShelfAndBooks)
+        .ThenInclude(x=>x.Books)
+        .Take(5)
+        .ToList();
+        
+        return View();
+    }
     public IActionResult Privacy()
     {
         // var x = new User("ali","545");
