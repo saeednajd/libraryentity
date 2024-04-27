@@ -52,12 +52,12 @@ public class HomeController : Controller
     {
         int myuser = 1;
         //// first method
-    //     var userss = _context.Books
-    // .Where(book => book.BookShelfAndBooks
-    //     .Any(bsb => bsb.BookShelves
-    //         .bookShelfAndUsers
-    //         .Any(bs => bs.User.Id == myuser)))
-    //             .ToList();
+        //     var userss = _context.Books
+        // .Where(book => book.BookShelfAndBooks
+        //     .Any(bsb => bsb.BookShelves
+        //         .bookShelfAndUsers
+        //         .Any(bs => bs.User.Id == myuser)))
+        //             .ToList();
 
         /// secend method
         var users = _context.Books
@@ -88,21 +88,42 @@ public class HomeController : Controller
 
 
     }
-    public IActionResult Oneuserfinishedbooks(){
+    public IActionResult Oneuserfinishedbooks()
+    {
         var users = _context.BookShelves
-        .Include(x=>x.bookShelfAndUsers)
-        .ThenInclude(x=>x.User)
-        .SelectMany(x=>x.bookShelfAndUsers.Select(x=>x.User))
-        .Where(x => x.bookShelfAndUsers.Any(bsb => bsb.BookShelf.BookStatus == 1)) 
-        .GroupBy(x=>x.Username)
-        
-        .Select(x=> new Oneuserfinishedbooksviewmodel {
-            Username=x.Key,
-            Count=x.Count()
-            
+        .Include(x => x.bookShelfAndUsers)
+        .ThenInclude(x => x.User)
+        .SelectMany(x => x.bookShelfAndUsers.Select(x => x.User))
+        .Where(x => x.bookShelfAndUsers.Any(bsb => bsb.BookShelf.BookStatus == 1))
+        .GroupBy(x => x.Username)
+
+        .Select(x => new Oneuserfinishedbooksviewmodel
+        {
+            Username = x.Key,
+            Count = x.Count()
+
         })
         .ToList();
         return View(users);
+    }
+    public IActionResult oneusershelves()
+    {
+
+        
+
+        ////////
+        int userId = 1;
+        var userdata = _context.Users
+           .Where(u => u.Id == userId)
+           .SelectMany(u => u.bookShelfAndUsers
+            .SelectMany(bsu => bsu.BookShelf.BookShelfAndShelves
+            .Select(bsas => new Oneusershelves{
+                Name = bsu.User.Username,
+                Shelfname = bsas.Shelf.Name
+            })))
+            .Distinct()
+           .ToList();
+        return View(userdata);
     }
     public IActionResult Privacy()
     {
