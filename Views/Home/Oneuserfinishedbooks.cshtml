@@ -1,0 +1,25 @@
+@using mvc.Models.MyClasse
+@model List<Oneuserfinishedbooksviewmodel>
+@{
+  ViewData["Title"] = "Home Page";
+}
+
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -88,6 +88,22 @@ public class HomeController : Controller
 
 
     }
+    public IActionResult Oneuserfinishedbooks(){
+        var users = _context.BookShelves
+        .Include(x=>x.bookShelfAndUsers)
+        .ThenInclude(x=>x.User)
+        .SelectMany(x=>x.bookShelfAndUsers.Select(x=>x.User))
+        .Where(x => x.bookShelfAndUsers.Any(bsb => bsb.BookShelf.BookStatus == 1)) 
+        .GroupBy(x=>x.Username)
+        
+        .Select(x=> new Oneuserfinishedbooksviewmodel {
+            Username=x.Key,
+            Count=x.Count()
+            
+        })
+        .ToList();
+        return View(users);
+    }
     public IActionResult Privacy()
     {
         // var x = new User("ali","545");
