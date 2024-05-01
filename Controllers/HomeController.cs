@@ -125,6 +125,31 @@ public class HomeController : Controller
            .ToList();
         return View(userdata);
     }
+
+    public IActionResult BestBookShelvesByUser()
+{
+    var bestBookShelvesByUser = _context.BookShelves
+       .Include(x => x.bookShelfAndUsers)
+       .ThenInclude(x => x.User)
+       .Include(x => x.BookShelfAndBooks)
+       .ThenInclude(x => x.Books)
+       .SelectMany(x => x.bookShelfAndUsers.Select(x => new
+        {
+            User = x.User,
+            BookShelf = x.BookShelf,
+            Books = x.BookShelf.BookShelfAndBooks.Select(x => x.Books)
+        }))
+       .GroupBy(x => x.User)
+       .Select(x => new
+        {
+            User = x.Key,
+            BookCount = x.Sum(y => y.Books.Count())
+        })
+       .OrderByDescending(x => x.BookCount)
+       .ToList();
+
+    return View(bestBookShelvesByUser);
+}
     public IActionResult Privacy()
     {
         // var x = new User("ali","545");
